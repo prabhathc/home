@@ -1,56 +1,62 @@
 'use client'
 import Link from "next/link";
 import { useState } from "react";
-import Modal from "./Modal";
+import { notification } from 'antd';
+import { SmileOutlined } from '@ant-design/icons';
+import { useCallback } from 'react';
 
 const NavBar = () => {
-    const [isModalOpen, setModalOpen] = useState(false);
-
-    const openModal = () => setModalOpen(true);
-    const closeModal = () => setModalOpen(false);
+    const copyEmail = useCallback(() => {
+        navigator.clipboard.writeText("prabhathc@icloud.com")
+            .then(() => {
+                notification.open({
+                    message: 'Email Copied',
+                    description: 'My email has been copied to your clipboard!',
+                    placement: 'bottomRight',
+                    icon: <SmileOutlined style={{ color: '#108ee9' }} />,
+                    duration: 2.5 // seconds
+                });
+            })
+            .catch(err => {
+                console.error('Failed to copy email:', err);
+                notification.open({
+                    message: 'Copy Failed',
+                    description: 'Failed to copy the email address. Please try again.',
+                    placement: 'bottomRight',
+                    duration: 2.5
+                });
+            });
+    }, []);
 
     return (
         <>
-            <nav className="bg-light-green flex justify-between items-center px-10 py-5">
-                <div className="flex items-center space-x-4">
+            <nav className="bg-light-green text-white justify-between flex items-center px-10 py-5">
+                <div className="flex items-center justify-start space-x-4">
                     <a href="/" className="text-xl font-bold">
                         P
                     </a>
                 </div>
 
-                <ul className="flex space-x-4">
-                    <li>
-                        <Link href="/about">
-                            About
-                        </Link>
-                    </li>
-                    <li>
-                        <Link href="/experience">
-                            Experience
-                        </Link>
-                    </li>
-                    <li>
-                        <Link href="/work">
-                            Work
-                        </Link>
-                    </li>
-                    <li>
-                        <button onClick={openModal}>
-                            Contact
-                        </button>
-                    </li>
-                    {/* Add or remove list items as necessary */}
-                </ul>
-
-                {/* Resume button */}
-                <a href="/resume" className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-md">
-                    Resume
-                </a>
+                <div className="flex justify-end">
+                    <ul className="flex items-center space-x-4">
+                        <li>
+                            <Link href="/work">
+                                Projects
+                            </Link>
+                        </li>
+                        <li>
+                            <button onClick={copyEmail}>
+                                Contact
+                            </button>
+                        </li>
+                        <li>
+                            <Link href="/resume2024.pdf" target="_blank" rel="noopener noreferrer">
+                                Resume
+                            </Link>
+                        </li>
+                    </ul>
+                </div>
             </nav>
-            <Modal isOpen={isModalOpen} onClose={closeModal}>
-                <h2 className="text-xl font-bold mb-4">Contact Us</h2>
-                {/* Contact form or information goes here */}
-            </Modal>
         </>
     );
 }

@@ -18,9 +18,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        {/* ... You can include meta tags and other head content here ... */}
-      </head>
       <body className={inter.className}>
         <NavBar />
         <main>{children}</main>
